@@ -1,0 +1,39 @@
+[
+  { "$match": { "_id": "" } },
+  {
+    "$unwind": "$songs"
+  },
+  {
+    "$lookup": {
+      "from": "localTrack_",
+      "localField": "songs",
+      "foreignField": "_id",
+      "as": "songs"
+    }
+  },
+  {
+      "$match": { "songs": { "$ne": [] } }
+  },
+  {
+    "$project": {
+      "song": { "$arrayElemAt": ["$songs", 0] }
+    }
+  },
+
+  {
+    "$replaceRoot": {
+      "newRoot": {
+        "_id": "$song.id",
+        "song": "$song"
+      }
+    }
+  },
+
+  {
+    "$replaceRoot": { "newRoot": { "$mergeObjects": ["$song", "$$ROOT"] } }
+  },
+
+  {
+    "$project": { "song": 0 }
+  }
+]
