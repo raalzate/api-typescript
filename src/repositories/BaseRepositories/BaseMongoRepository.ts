@@ -101,10 +101,19 @@ export abstract class BaseMongoRepository<T>
   }
   update(
     id: String,
-    object: T,
+    query: any,
     options?: UpdateOneOptions
-  ): Promise<WriteOpResult> {
-    return this.getCollection().update({ _id: id }, object, options);
+  ): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.getCollection()
+        .update({ _id: id }, query, options)
+        .then(data => {
+          resolve(data && data.result ? data.result : data);
+        })
+        .catch(err => {
+          reject(err.result ? err.result : err);
+        });
+    });
   }
   delete(id: String): Promise<WriteOpResult> {
     return this.getCollection().remove({ _id: id });

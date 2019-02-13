@@ -16,7 +16,7 @@ import {
     playlistService: PlayListService;
 
   @Post("/:barId/add")
-  async add(@Param("barId") barId: String, @Body() body: Array<PlayList>) {
+  async addPlayLists(@Param("barId") barId: String, @Body() body: Array<PlayList>) {
     if (!body&&body.length === 0) {
       return {
         error: "el arraglo de playlist no puede ir vacio"
@@ -24,6 +24,17 @@ import {
     }
     this.playlistService.setId(barId);
     return await this.playlistService.addPlayListToBard(body);
+  }
+
+  @Put("/:barId/:playList/add")
+  async addSongsToPlayList(@Param("barId") barId: String, @Param("playList") playList: String, @Body() body: Array<String>){
+    if (!body&&body.length === 0) {
+      return {
+        error: "el arraglo de Strings no puede ir vacio"
+      };
+    }
+    this.playlistService.setId(barId);
+    return await this.playlistService.addSongToPlayList(playList, body);
   }
 
 }

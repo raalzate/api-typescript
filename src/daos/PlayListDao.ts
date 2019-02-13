@@ -14,4 +14,7 @@ export class PlayListDao {
   async addPlayListToBar(playlists:Array<PlayList>): Promise<any[]>{
     return await this.playListRepository.saveMassive(playlists);
   }
+  async addSongToPlayList(idPlayList: String, tracks:Array<String>): Promise<any>{
+    return await this.playListRepository.update(idPlayList,{ $push: { songs: { $each: tracks } } });
+  }
 }
