@@ -59,6 +59,18 @@ export abstract class BaseMongoRepository<T>
   delete(id: String): Promise<WriteOpResult> {
     return this.getCollection().remove({ _id: id });
   }
+  updateMany(query:any,data:any):Promise<any>{
+    return new Promise<any>((resolve, reject) => {
+      this.getCollection()
+        .update(query,data,{multi:true})
+        .then(data => {
+          resolve(data.result);
+        })
+        .catch(err => {
+          reject(err.error);
+        });
+    });
+  }
   getCode(code:number){
    return erorrCodes[code]?erorrCodes[code]:"UNKNOW_ERROR";
   }

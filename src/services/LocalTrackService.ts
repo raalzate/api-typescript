@@ -23,4 +23,7 @@ export class LocalTrackService {
     }
     return dataLocal;
   }
+  privateSong(data:any):Promise<number>{
+    return this.localTrackDao.privateSong(data)
+  }
 }

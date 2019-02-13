@@ -52,19 +52,22 @@ export class LocalTrackDao {
       });
     } catch (error) {
       if (error && error.result) {
-        resultMongo=resultMongo.concat(this.getRegisterSongs(error,localTracks));
-        resultMongo=resultMongo.concat(this.getNotRegisterSongs(error,localTracks));
+        resultMongo = resultMongo.concat(
+          this.getRegisterSongs(error, localTracks)
+        );
+        resultMongo = resultMongo.concat(
+          this.getNotRegisterSongs(error, localTracks)
+        );
       }
     }
     return resultMongo;
   }
-  getRegisterSongs(error:any,localTracks:Array<LocalTrack>){
-    const resDataArray:Array<any>=[];
+  getRegisterSongs(error: any, localTracks: Array<LocalTrack>) {
+    const resDataArray: Array<any> = [];
     if (error.result.nInserted > 0) {
       localTracks.forEach((track: LocalTrack) => {
         const resError: any = error.result.writeErrors.find(
-          (element: WriteError) =>
-            localTracks[element.index].id === track.id
+          (element: WriteError) => localTracks[element.index].id === track.id
         );
         if (!resError) {
           resDataArray.push({
@@ -77,8 +80,8 @@ export class LocalTrackDao {
     }
     return resDataArray;
   }
-  getNotRegisterSongs(error:any,localTracks:Array<LocalTrack>){
-    const resultMongo:Array<any>=[];
+  getNotRegisterSongs(error: any, localTracks: Array<LocalTrack>) {
+    const resultMongo: Array<any> = [];
     error.result.writeErrors.forEach((element: WriteError) => {
       const index = element.index;
       resultMongo.push({
@@ -88,5 +91,12 @@ export class LocalTrackDao {
       });
     });
     return resultMongo;
+  }
+
+  async privateSong(data: any): Promise<any> {
+    return await this.localTrackRepository.updateMany(
+      { _id: { $in: data.tracks } },
+      { $set: { private: data.private } }
+    );
   }
 }
