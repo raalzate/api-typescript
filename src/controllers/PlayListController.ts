@@ -10,20 +10,20 @@ import {
   import { Inject } from "typedi";
   import { PlayListService } from "../services/PlayListService";
   
-  @JsonController("/PlayList")
+  @JsonController("/playList")
   export class PlayListController {
     @Inject()
-    userService: PlayListService;
+    playlistService: PlayListService;
 
-    @Put("/:barId")
-  async add(@Param("barId") barId: String, @Body() body: any) {
-    if (body <= 0) {
+  @Post("/:barId/add")
+  async add(@Param("barId") barId: String, @Body() body: Array<PlayList>) {
+    if (!body&&body.length === 0) {
       return {
-        error: "el page tiene que ser mayor a 0"
+        error: "el arraglo de playlist no puede ir vacio"
       };
     }
-    this.userService.setId(barId);
-  //  return await this.userService.privateSong(body);
+    this.playlistService.setId(barId);
+    return await this.playlistService.addPlayListToBard(body);
   }
 
 }

@@ -3,7 +3,6 @@ import { Cursor } from "mongodb";
 
 
 export default class PlayListRepository extends BaseMongoRepository<PlayList>{
-    nameCollection: String = "playList";
-    
-    
+    nameCollection: String = "playLists";
+        
 }

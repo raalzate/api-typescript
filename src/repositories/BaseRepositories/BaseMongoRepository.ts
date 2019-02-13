@@ -4,6 +4,7 @@ import {
   InsertOneWriteOpResult,
   WriteOpResult,
   UpdateOneOptions,
+  WriteError,
   Cursor
 } from "mongodb";
 import { MongoRepositoryInterface } from "../Interfaces/MongoRepositoryInterface";
@@ -33,7 +34,60 @@ export abstract class BaseMongoRepository<T>
   getAll(query: any = {}, options: any = {}): Cursor<T> {
     return this.getCollection().find<T>(query, options);
   }
-  saveMassive(arrayData: Array<T>): Promise<any> {
+  save(object: T): Promise<InsertOneWriteOpResult> {
+    return this.getCollection().insert(object);
+  }
+  async saveMassive(arrayData: Array<T>): Promise<any[]> {
+    let resultMongo: Array<any> = [];
+    try {
+      await this.insertMany(arrayData);
+      arrayData.forEach((element:any) => {
+        resultMongo.push({
+          id: element.id,
+          insert: "OK",
+          err: null
+        });
+      });
+    } catch (error) {
+      if (error && error.result) {
+        resultMongo=resultMongo.concat(this.getRegisterData(error,arrayData));
+        resultMongo=resultMongo.concat(this.getNotRegisterData(error,arrayData));
+      }
+    }
+    return resultMongo;
+  }
+  private getRegisterData(error:any,arrayData: Array<any>){
+    const resDataArray:Array<any>=[];
+    if (error.result.nInserted > 0) {
+      arrayData.forEach((data: any) => {
+        const resError: any = error.result.writeErrors.find(
+          (element: WriteError) =>
+          arrayData[element.index].id === data.id
+        );
+        if (!resError) {
+          resDataArray.push({
+            id: data.id,
+            insert: "OK",
+            err: null
+          });
+        }
+      });
+    }
+    return resDataArray;
+  }
+  private getNotRegisterData(error:any,arrayData: Array<any>){
+    const resultMongo:Array<any>=[];
+    error.result.writeErrors.forEach((element: WriteError) => {
+      const index = element.index;
+      resultMongo.push({
+        id: arrayData[index].id,
+        insert: "FAIL",
+        err: this.getCode(element.code)
+      });
+    });
+    return resultMongo;
+  }
+  private insertMany(arrayData: Array<T>){
     return new Promise<any>((resolve, reject) => {
       this.getCollection()
         .insertMany(arrayData, { w: 1, ordered: false })
@@ -45,10 +99,6 @@ export abstract class BaseMongoRepository<T>
         });
     });
   }
-  save(object: T): Promise<InsertOneWriteOpResult> {
-    return this.getCollection().insert(object);
-  }
-
   update(
     id: String,
     object: T,

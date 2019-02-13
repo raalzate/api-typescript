@@ -3,5 +3,5 @@ class PlayList{
     id: String;
     name: String;
     private: boolean=false;
-    size: number=0;
+    songs: Array<String>=[]
 }

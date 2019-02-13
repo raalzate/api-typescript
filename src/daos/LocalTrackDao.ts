@@ -40,26 +40,7 @@ export class LocalTrackDao {
     };
   }
   async saveMassive(localTracks: Array<LocalTrack>): Promise<any[]> {
-    let resultMongo: Array<any> = [];
-    try {
-      await this.localTrackRepository.saveMassive(localTracks);
-      localTracks.forEach(element => {
-        resultMongo.push({
-          id: element.id,
-          insert: "OK",
-          err: null
-        });
-      });
-    } catch (error) {
-      if (error && error.result) {
-        resultMongo = resultMongo.concat(
-          this.getRegisterSongs(error, localTracks)
-        );
-        resultMongo = resultMongo.concat(
-          this.getNotRegisterSongs(error, localTracks)
-        );
-      }
-    }
+    let resultMongo: Array<any> = await this.localTrackRepository.saveMassive(localTracks);
     return resultMongo;
   }
   getRegisterSongs(error: any, localTracks: Array<LocalTrack>) {

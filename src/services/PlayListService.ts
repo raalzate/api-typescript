@@ -8,4 +8,7 @@ export class PlayListService{
   setId(barId:String){
     this.playListDao.setId(barId);
   }
+  async addPlayListToBard(playlists:Array<PlayList>): Promise<any[]>{
+    return await this.playListDao.addPlayListToBar(playlists);
+  }
 }

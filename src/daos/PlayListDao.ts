@@ -11,4 +11,7 @@ export class PlayListDao {
   setId(barId: String) {
     this.playListRepository.setId(barId);
   }
+  async addPlayListToBar(playlists:Array<PlayList>): Promise<any[]>{
+    return await this.playListRepository.saveMassive(playlists);
+  }
 }
