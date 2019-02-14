@@ -115,8 +115,17 @@ export abstract class BaseMongoRepository<T>
         });
     });
   }
-  delete(id: String): Promise<WriteOpResult> {
-    return this.getCollection().remove({ _id: id });
+  delete(id: String):Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.getCollection()
+      .remove({ _id: id })
+        .then(data => {
+          resolve(data.result);
+        })
+        .catch(err => {
+          reject(err.error);
+        });
+    });
   }
   updateMany(query:any,data:any):Promise<any>{
     return new Promise<any>((resolve, reject) => {

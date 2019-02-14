@@ -1,5 +1,5 @@
 import { Service, Inject } from "typedi";
-import {PlayListDao} from "../daos/PlayListDao";
+import {PlayListDao} from "../daos/PlayListDao"
 
 @Service()
 export class PlayListService{
@@ -13,5 +13,5 @@ export class PlayListService{
   }
   async addSongToPlayList(idPlayList: String, tracks:Array<String>): Promise<any>{
     return await this.playListDao.addSongToPlayList(idPlayList, tracks);
-  }
+  } 
 }

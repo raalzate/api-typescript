@@ -17,4 +17,7 @@ export class PlayListDao {
   async addSongToPlayList(idPlayList: String, tracks:Array<String>): Promise<any>{
     return await this.playListRepository.update(idPlayList,{ $push: { songs: { $each: tracks } } });
   }
+  async deletePlaylist(idPlayList:String): Promise<any>{
+    return await this.playListRepository.delete(idPlayList)
+  }
 }
