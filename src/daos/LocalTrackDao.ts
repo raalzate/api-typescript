@@ -1,7 +1,6 @@
 import { RepositoryMongo } from "../annotations/repository";
 import LocalTrackRepository from "../repositories/Repositories/Mongo/LocalTrackRepository";
 import { Service } from "typedi";
-import { WriteError } from "mongodb";
 
 @Service()
 export class LocalTrackDao {
@@ -43,35 +42,8 @@ export class LocalTrackDao {
     let resultMongo: Array<any> = await this.localTrackRepository.saveMassive(localTracks);
     return resultMongo;
   }
-  getRegisterSongs(error:any,localTracks:Array<LocalTrack>){
-    const resDataArray:Array<any>=[];
-    if (error.result.nInserted > 0) {
-      localTracks.forEach((track: LocalTrack) => {
-        const resError: any = error.result.writeErrors.find(
-          (element: WriteError) =>
-            localTracks[element.index].id === track.id
-        );
-        if (!resError) {
-          resDataArray.push({
-            id: track.id,
-            insert: "OK",
-            err: null
-          });
-        }
-      });
-    }
-    return resDataArray;
-  }
-  getNotRegisterSongs(error:any,localTracks:Array<LocalTrack>){
-    const resultMongo:Array<any>=[];
-    error.result.writeErrors.forEach((element: WriteError) => {
-      const index = element.index;
-      resultMongo.push({
-        id: localTracks[index].id,
-        insert: "FAIL",
-        err: this.localTrackRepository.getCode(element.code)
-      });
-    });
+  async deleteMassive(idsTracksToDelete: Array<String>): Promise<any>{
+    let resultMongo: Array<any> = await this.localTrackRepository.deleteMany(idsTracksToDelete);
     return resultMongo;
   }
 }
