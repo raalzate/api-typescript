@@ -4,8 +4,9 @@ import {
   Post,
   Body,
   QueryParams,
-  Put,
-  JsonController
+  JsonController,
+  Delete,
+  Put
 } from "routing-controllers";
 import { Inject } from "typedi";
 import { LocalTrackService } from "../services/LocalTrackService";
@@ -59,5 +60,13 @@ export class LocalTrackController {
     }
     this.userService.setId(barId);
     return await this.userService.privateSong(body);
+  }
+  @Delete("/:barId/remove")
+  async removeLocalTracks(
+    @Param("barId") barId: String,
+    @Body() idSongsToRemove:Array<String>
+  ) {
+    this.userService.setId(barId);
+    return await this.userService.deleteMassive(idSongsToRemove);
   }
 }

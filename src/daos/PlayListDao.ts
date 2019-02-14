@@ -20,4 +20,8 @@ export class PlayListDao {
   async deletePlaylist(idPlayList:String): Promise<any>{
     return await this.playListRepository.delete(idPlayList)
   }
+  async getPlayList(idPlayList:String):Promise<PlayList>{
+    return await this.playListRepository.getOnlyOne(idPlayList)
+  }
+
 }

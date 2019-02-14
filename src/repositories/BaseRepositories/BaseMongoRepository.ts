@@ -37,6 +37,10 @@ export abstract class BaseMongoRepository<T>
   save(object: T): Promise<InsertOneWriteOpResult> {
     return this.getCollection().insert(object);
   }
+
+
+  //-----------------------------start----------------------------------//
+  //seccion para registro massivo de items en una collecion
   async saveMassive(arrayData: Array<T>): Promise<any[]> {
     let resultMongo: Array<any> = [];
     try {
@@ -99,6 +103,22 @@ export abstract class BaseMongoRepository<T>
         });
     });
   }
+  //-----------------------------end----------------------------------//
+  
+  //fin de la seccion para registro massivo de items en una collecion
+  deleteMany(arrayData: Array<String>): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.getCollection()
+        .remove({ _id : { $in: arrayData } } )
+        .then(data => {
+          resolve(data && data.result ? data.result : data);
+        })
+        .catch(err => {
+          reject(err.result ? err.result : err);
+        });
+    });
+  }
+
   update(
     id: String,
     query: any,

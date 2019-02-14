@@ -5,7 +5,8 @@ import {
     Body,
     Put,
     QueryParams,
-    JsonController
+    JsonController,
+    Delete
   } from "routing-controllers";
   import { Inject } from "typedi";
   import { PlayListService } from "../services/PlayListService";
@@ -37,4 +38,14 @@ import {
     return await this.playlistService.addSongToPlayList(playList, body);
   }
 
+@Delete("/:barId/:playListId")
+async deletePlayList(@Param("barId") barId: String, @Param("playListId") playListId: String){
+  if (!barId&&!playListId){
+    return {
+      error: "los parametros no pueden venir nulos"
+    };
+  }
+  this.playlistService.setId(barId);
+  return await this.playlistService.deletePlayList(playListId);
+}
 }
