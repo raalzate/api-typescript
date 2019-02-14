@@ -38,14 +38,24 @@ import {
     return await this.playlistService.addSongToPlayList(playList, body);
   }
 
-@Delete("/:barId/:playListId")
-async deletePlayList(@Param("barId") barId: String, @Param("playListId") playListId: String){
-  if (!barId&&!playListId){
-    return {
-      error: "los parametros no pueden venir nulos"
+  @Delete("/:barId/:playListId")
+  async deletePlayList(@Param("barId") barId: String, @Param("playListId") playListId: String){
+    if (!barId&&!playListId){
+      return {
+        error: "los parametros no pueden venir nulos"
     };
   }
   this.playlistService.setId(barId);
   return await this.playlistService.deletePlayList(playListId);
-}
+  }
+  @Get("/:barId")
+  async getPlayLists(@Param("barId") barId: String){
+    if (!barId){
+      return {
+        error: "los parametros no pueden venir nulos"
+    }
+    }
+    this.playlistService.setId(barId);
+  return await this.playlistService.getPlayLists();
+  }
 }

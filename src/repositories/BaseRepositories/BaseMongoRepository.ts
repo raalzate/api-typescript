@@ -5,7 +5,8 @@ import {
   WriteOpResult,
   UpdateOneOptions,
   WriteError,
-  Cursor
+  Cursor,
+  AggregationCursor
 } from "mongodb";
 import { MongoRepositoryInterface } from "../Interfaces/MongoRepositoryInterface";
 
@@ -33,6 +34,9 @@ export abstract class BaseMongoRepository<T>
   }
   getAll(query: any = {}, options: any = {}): Cursor<T> {
     return this.getCollection().find<T>(query, options);
+  }
+  aggregate(query: any = []):AggregationCursor<any> {
+    return this.getCollection().aggregate(query);
   }
   save(object: T): Promise<InsertOneWriteOpResult> {
     return this.getCollection().insert(object);
