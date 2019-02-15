@@ -1,11 +1,11 @@
 [
-  { "$match": { "_id": "" } },
+  { "$match": { "_id": "idPlaylist" } },
   {
     "$unwind": "$songs"
   },
   {
     "$lookup": {
-      "from": "localTrack_",
+      "from": "localTrack_idBar",
       "localField": "songs",
       "foreignField": "_id",
       "as": "songs"

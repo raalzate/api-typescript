@@ -8,7 +8,7 @@ export default class LocalTrackRepository extends BaseMongoRepository<LocalTrack
     if (!data.web) {
       cursorLocalTrack = this.getAll({ private: false });
     } else {
-      cursorLocalTrack = this.getAll({});
+      cursorLocalTrack = this.getAll();
     }
     if (data.page !== undefined) {
       const page = parseInt(data.page);

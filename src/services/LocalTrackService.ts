@@ -23,6 +23,9 @@ export class LocalTrackService {
     }
     return dataLocal;
   }
+  privateSong(data:any):Promise<number>{
+    return this.localTrackDao.privateSong(data)
+  }
   async deleteMassive(idsTracksToDelete: Array<String>):Promise<any> {
     return await this.localTrackDao.deleteMassive(idsTracksToDelete);
   }

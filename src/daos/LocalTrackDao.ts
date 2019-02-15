@@ -46,4 +46,11 @@ export class LocalTrackDao {
     let resultMongo: Array<any> = await this.localTrackRepository.deleteMany(idsTracksToDelete);
     return resultMongo;
   }
+
+  async privateSong(data: any): Promise<any> {
+    return await this.localTrackRepository.updateMany(
+      { _id: { $in: data.tracks } },
+      { $set: { private: data.private } }
+    );
+  }
 }

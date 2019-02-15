@@ -5,7 +5,8 @@ import {
   Body,
   QueryParams,
   JsonController,
-  Delete
+  Delete,
+  Put
 } from "routing-controllers";
 import { Inject } from "typedi";
 import { LocalTrackService } from "../services/LocalTrackService";
@@ -49,6 +50,16 @@ export class LocalTrackController {
   ) {
     this.userService.setId(barId);
     return await this.userService.registerLocalTracks(localTracks);
+  }
+  @Put("/:barId")
+  async blockTracks(@Param("barId") barId: String, @Body() body: any) {
+    if (body <= 0) {
+      return {
+        error: "el page tiene que ser mayor a 0"
+      };
+    }
+    this.userService.setId(barId);
+    return await this.userService.privateSong(body);
   }
   @Delete("/:barId/remove")
   async removeLocalTracks(

@@ -5,7 +5,8 @@ import {
   WriteOpResult,
   UpdateOneOptions,
   WriteError,
-  Cursor
+  Cursor,
+  AggregationCursor
 } from "mongodb";
 import { MongoRepositoryInterface } from "../Interfaces/MongoRepositoryInterface";
 
@@ -33,6 +34,9 @@ export abstract class BaseMongoRepository<T>
   }
   getAll(query: any = {}, options: any = {}): Cursor<T> {
     return this.getCollection().find<T>(query, options);
+  }
+  aggregate(query: any = []):AggregationCursor<any> {
+    return this.getCollection().aggregate(query);
   }
   save(object: T): Promise<InsertOneWriteOpResult> {
     return this.getCollection().insert(object);
@@ -121,13 +125,43 @@ export abstract class BaseMongoRepository<T>
 
   update(
     id: String,
-    object: T,
+    query: any,
     options?: UpdateOneOptions
-  ): Promise<WriteOpResult> {
-    return this.getCollection().update({ _id: id }, object, options);
+  ): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.getCollection()
+        .update({ _id: id }, query, options)
+        .then(data => {
+          resolve(data && data.result ? data.result : data);
+        })
+        .catch(err => {
+          reject(err.result ? err.result : err);
+        });
+    });
   }
-  delete(id: String): Promise<WriteOpResult> {
-    return this.getCollection().remove({ _id: id });
+  delete(id: String):Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.getCollection()
+      .remove({ _id: id })
+        .then(data => {
+          resolve(data.result);
+        })
+        .catch(err => {
+          reject(err.error);
+        });
+    });
+  }
+  updateMany(query:any,data:any):Promise<any>{
+    return new Promise<any>((resolve, reject) => {
+      this.getCollection()
+        .update(query,data,{multi:true})
+        .then(data => {
+          resolve(data.result);
+        })
+        .catch(err => {
+          reject(err.error);
+        });
+    });
   }
   getCode(code:number){
    return erorrCodes[code]?erorrCodes[code]:"UNKNOW_ERROR";

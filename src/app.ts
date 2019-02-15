@@ -6,7 +6,7 @@ import * as path from 'path';
 import { containerMongo } from "./repositories/ContainerMongo";
 import { ContainerFirebase } from "./repositories/ContainerFirebase";
 
-const portServer:any=process.env.PORT || 8384;
+const portServer:any=process.env.PORT || 8385;
 
 const  runServer=async ()=>{
     await containerMongo()
