@@ -35,4 +35,7 @@ export class PlayListDao {
       ])
       .toArray();
   }
+  getSongsPlaylist(idPlaylist:String,params: String){
+    return  this.playListRepository.getSongsPlaylist(idPlaylist,params)
+  }
 }

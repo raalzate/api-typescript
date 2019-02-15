@@ -28,5 +28,7 @@ export class PlayListService{
   async getPlayLists():Promise<PlayList[]>{
     return await this.playListDao.getAllPlayList()
   }
-  
+  async getSongsPlaylist(idPlayList: String,params: any):Promise<any>{
+    return await this.playListDao.getSongsPlaylist(idPlayList,params)
+  }
 }
