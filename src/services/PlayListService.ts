@@ -1,15 +1,15 @@
 import { Service, Inject } from "typedi";
 import {PlayListDao} from "../daos/PlayListDao"
-import {LocalTrackDao} from "../daos/LocalTrackDao"
+import {LocalTrackService} from "../services/LocalTrackService"
 
 @Service()
 export class PlayListService{
+
   @Inject()
   playListDao:PlayListDao
 
   @Inject()
-  localTrackDao:LocalTrackDao
-
+  localTrackService:LocalTrackService
 
   setId(barId:String){
     this.playListDao.setId(barId);
@@ -22,7 +22,8 @@ export class PlayListService{
   } 
   async deletePlayList(idPlayList: String): Promise<any>{
     const playList: PlayList =  await this.playListDao.getPlayList(idPlayList)
-    await this.localTrackDao.deleteMassive(playList.songs)
+    
+    await this.localTrackService.deleteMassive(playList.songs)
     return await this.playListDao.deletePlaylist(idPlayList)
   }
   async getPlayLists():Promise<PlayList[]>{
