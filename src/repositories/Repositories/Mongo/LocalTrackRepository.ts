@@ -4,6 +4,7 @@ import { Cursor } from "mongodb";
 export default class LocalTrackRepository extends BaseMongoRepository<LocalTrack> {
   nameCollection: String = "localTrack";
   getAllLocalTracks(data: any): Promise<LocalTrack[]> {
+    console.log(data);
     let cursorLocalTrack: Cursor<LocalTrack> = null;
     if (!data.web) {
       cursorLocalTrack = this.getAll({ private: false });

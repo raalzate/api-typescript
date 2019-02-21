@@ -1,6 +1,7 @@
 import { RepositoryMongo } from "../annotations/repository";
 import LocalTrackRepository from "../repositories/Repositories/Mongo/LocalTrackRepository";
 import { Service } from "typedi";
+import { AggregationCursor } from "mongodb";
 
 @Service()
 export class LocalTrackDao {
@@ -52,5 +53,12 @@ export class LocalTrackDao {
       { _id: { $in: data.tracks } },
       { $set: { private: data.private } }
     );
+  }
+  getRamdomSongs():Promise<LocalTrack[]>{
+    let cursorLocalTrack: AggregationCursor<LocalTrack> = null;
+    cursorLocalTrack = this.localTrackRepository.aggregate({ $sample: { size: 100 } });
+    cursorLocalTrack.skip(0);
+    cursorLocalTrack.limit(100);
+    return cursorLocalTrack.toArray();
   }
 }

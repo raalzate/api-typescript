@@ -32,4 +32,7 @@ export class PlayListService{
   async getSongsPlaylist(idPlayList: String,params: any):Promise<any>{
     return await this.playListDao.getSongsPlaylist(idPlayList,params)
   }
+  getRamdomSongsPlaylist(idPlayList: String):Promise<any>{
+    return  this.playListDao.getRamdomSongsPlaylist(idPlayList)
+  }
 }

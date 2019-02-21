@@ -1,0 +1,66 @@
+[
+    { "$match": { "_id": "" } },
+    {
+      "$unwind": "$lists"
+    },
+    {
+      "$lookup": {
+        "from": "playLists_",
+        "localField": "lists",
+        "foreignField": "_id",
+        "as": "lists"
+      }
+    },
+    {
+      "$project": {
+        "list": { "$arrayElemAt": ["$lists", 0] }
+      }
+    },
+    {
+      "$replaceRoot": {
+        "newRoot": {
+          "_id": "$list.id",
+          "list": "$list"
+        }
+      }
+    },
+    {
+      "$replaceRoot": { "newRoot": { "$mergeObjects": ["$list", "$$ROOT"] } }
+    },
+    {
+      "$project": { "list": 0 }
+    },
+    {
+      "$unwind": "$songs"
+    },
+    {
+      "$lookup": {
+        "from": "localTrack_",
+        "localField": "songs",
+        "foreignField": "_id",
+        "as": "songs"
+      }
+    },
+    {
+      "$project": {
+        "song": { "$arrayElemAt": ["$songs", 0] }
+      }
+    },
+    {
+      "$replaceRoot": {
+        "newRoot": {
+          "_id": "$song.id",
+          "song": "$song"
+        }
+      }
+    },
+    {
+      "$replaceRoot": { "newRoot": { "$mergeObjects": ["$song", "$$ROOT"] } }
+    },
+    {
+      "$project": { "song": 0 }
+    },
+    { "$sample": { "size": 1000 } },
+    {"$skip": 0 },
+    { "$limit": 100 }
+]

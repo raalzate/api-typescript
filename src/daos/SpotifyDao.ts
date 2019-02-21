@@ -16,6 +16,11 @@ export class SpotifyDao {
   setRefreshToken(refreshToken: String) {
     this.spotify.setRefresToken(refreshToken);
   }
+   
+  getUrlSpotify(): String {
+    return this.spotify.getUrlIntegration();
+  }
+
 
   async getPlaylist(): Promise<any> {
     await this.spotify.refreshAccessToken();

@@ -38,4 +38,7 @@ export class PlayListDao {
   getSongsPlaylist(idPlaylist:String,params: String){
     return  this.playListRepository.getSongsPlaylist(idPlaylist,params)
   }
+  getRamdomSongsPlaylist(idPlaylist:String){
+    return  this.playListRepository.getRamdomSongsPlaylist(idPlaylist)
+  }
 }

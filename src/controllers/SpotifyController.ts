@@ -15,6 +15,16 @@ export class SpotifyController {
   @Inject()
   spotifyService: SpotifyService;
 
+  @Get("/url/:barId")
+   createUrlSpotify(
+    @Param("barId") barId: String
+  ) {
+    this.spotifyService.setId(barId);
+    const url=this.spotifyService.getUrlIntegration();
+    return {
+      url
+    }
+  }
   @Post("/playlists/:barId")
   async getPlaylists(
     @Param("barId") barId: String,
@@ -26,7 +36,7 @@ export class SpotifyController {
   }
 
   @Get("/user/:barId")
-  async registerMasive(
+  async gerUser(
     @Param("barId") barId: String
   ) {
     this.spotifyService.setId(barId);

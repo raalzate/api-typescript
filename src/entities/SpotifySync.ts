@@ -1,5 +1,7 @@
 
-class SpotifySync{
+export default class SpotifySync{
+    code:String;
+    device:String;
     playlist : String;
     token:any={
         access_token: String,

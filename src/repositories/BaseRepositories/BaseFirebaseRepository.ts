@@ -33,8 +33,20 @@ export abstract class BaseFirebaseRepository<T>
         });
     });
   }
-  save(object: T): Promise<void> {
+  save(object: any): Promise<void> {
     return this.getRef().set(object);
+  }
+  updateMany(object: any): Promise<void> {
+    return new Promise<any>((resolve, reject) => {
+      return this.getRef()
+        .update(object)
+        .then(() => {
+          resolve({result:"OK"});
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
   update(object: T): Promise<void> {
     return this.getRef().update(object);

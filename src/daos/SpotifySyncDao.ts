@@ -5,7 +5,7 @@ import { RepositoryFirebase } from "../annotations/repository";
 import * as admin from "firebase-admin";
 
 @Service()
-export class SpotifySyncRepositoryDao {
+export class SpotifySyncDao {
   @RepositoryFirebase()
   spotifySyncRepository:SpotifySyncRepository;
    
@@ -14,5 +14,8 @@ export class SpotifySyncRepositoryDao {
   }
   async getSyncRepository(): Promise<admin.database.DataSnapshot>{
     return await this.spotifySyncRepository.getOnlyOne();
+  }
+  setCode(code:String): Promise<void>{
+    return this.spotifySyncRepository.save({code});
   }
 }
